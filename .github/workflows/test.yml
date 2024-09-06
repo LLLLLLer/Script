@@ -1,9 +1,9 @@
 name: Weibo Sign Chaohua
 
-# 使用 `schedule` 事件，每天在凌晨12:05触发
+# 使用 `schedule` 事件，每天在凌晨12:01触发
 on:
   schedule:
-    - cron: '40 7 * * *'  # 使用CRON表达式，每天0:05触发（UTC时间）
+    - cron: '1 16 * * *'  # 使用CRON表达式，每天0:01触发（UTC时间）
 
 jobs:
   sign:
