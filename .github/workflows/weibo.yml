@@ -23,6 +23,18 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt  # 安装依赖（假设你有 requirements.txt 文件）
 
+    # 读取 GitHub Secrets 中的 STREAK_HISTORY 并设置为环境变量
+    - name: Load streak history from secrets
+      run: echo "STREAK_HISTORY=${{ secrets.STREAK_HISTORY }}" >> $GITHUB_ENV
+
     - name: Run the weibo sign script
       run: |
         python weibo_sign_chaohua.py  # 运行签到脚本
+
+    # 更新签到后的 streak 历史到 GitHub Secrets
+    - name: Save streak history to secrets
+      run: |
+        echo "STREAK_HISTORY=$(cat $GITHUB_ENV | grep STREAK_HISTORY | cut -d'=' -f2)"  # 获取签到后的 STREAK_HISTORY
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub Token 更新 Secrets
+      if: always()  # 无论签到是否成功，始终更新历史
