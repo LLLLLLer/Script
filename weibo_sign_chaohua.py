@@ -122,10 +122,15 @@ def read_streak():
     # 从 GitHub Actions 环境变量读取 streak
     STREAK_HISTORY = os.getenv('STREAK_HISTORY', 'None')
     if STREAK_HISTORY != 'None':
-        last_date_str, streak_count = STREAK_HISTORY.split(',')
-        last_date = datetime.strptime(last_date_str, "%Y-%m-%d")
-        return last_date, int(streak_count)
-    return None, 0
+        if ',' in STREAK_HISTORY:
+            last_date_str, streak_count = STREAK_HISTORY.split(',')
+            last_date = datetime.strptime(last_date_str, "%Y-%m-%d")
+            return last_date, int(streak_count)
+        else:
+            # 如果 STREAK_HISTORY 格式不正确，抛出错误
+            raise ValueError(f"Invalid STREAK_HISTORY format: {STREAK_HISTORY}")
+    return None, 0  # 没有签到历史时返回默认值
+
 
 def update_streak(today, streak_count):
     # 更新 GitHub Actions 环境变量
