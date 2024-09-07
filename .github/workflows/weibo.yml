@@ -3,7 +3,7 @@ name: Weibo Sign Chaohua
 # 在每天的UTC时间16:10，即北京时间00:10触发
 on:
   schedule:
-    - cron: '20 16 * * *'  # UTC时间 16:10, 北京时间 00:10
+    - cron: '40 17 * * *'  # UTC时间 16:10, 北京时间 00:10
 
 jobs:
   sign:
