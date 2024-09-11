@@ -121,15 +121,19 @@ def sign_in(headers, base_params, scheme):
 def read_streak():
     # 从 GitHub Actions 环境变量读取 streak
     STREAK_HISTORY = os.getenv('STREAK_HISTORY', 'None')
-    if STREAK_HISTORY != 'None':
-        if ',' in STREAK_HISTORY:
-            last_date_str, streak_count = STREAK_HISTORY.split(',')
+    if STREAK_HISTORY == 'None' or STREAK_HISTORY == '':
+        return None, 0  # 没有签到历史时返回默认值
+    if ',' in STREAK_HISTORY:
+        last_date_str, streak_count = STREAK_HISTORY.split(',')
+        try:
             last_date = datetime.strptime(last_date_str, "%Y-%m-%d")
             return last_date, int(streak_count)
-        else:
-            # 如果 STREAK_HISTORY 格式不正确，抛出错误
-            raise ValueError(f"Invalid STREAK_HISTORY format: {STREAK_HISTORY}")
-    return None, 0  # 没有签到历史时返回默认值
+        except ValueError:
+            raise ValueError(f"Invalid date format in STREAK_HISTORY: {STREAK_HISTORY}")
+    else:
+        # 如果 STREAK_HISTORY 格式不正确，抛出错误
+        raise ValueError(f"Invalid STREAK_HISTORY format: {STREAK_HISTORY}")
+
 
 
 def update_streak(today, streak_count):
