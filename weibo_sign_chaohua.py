@@ -167,6 +167,9 @@ if __name__ == "__main__":
 
     # 判断是否是连续签到
     if last_sign_in_date is not None:
+        # 将 last_sign_in_date 转换为日期类型（去掉时间部分）
+        last_sign_in_date = last_sign_in_date.date()
+
         if (today - last_sign_in_date) == timedelta(days=1):
             streak_count += 1  # 连续签到
         elif (today - last_sign_in_date) > timedelta(days=1):
