@@ -1,9 +1,9 @@
 name: Weibo Sign Chaohua
 
-# 在每天的UTC时间16:10，即北京时间00:10触发
+# 在每天的UTC时间2:00，即北京时间10:00触发
 on:
   schedule:
-    - cron: '0 18 * * *'  # UTC时间 17:40, 北京时间 02:00
+    - cron: '0 2 * * *'  # UTC时间 2:00, 北京时间 10:00
 
 jobs:
   sign:
@@ -23,13 +23,21 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt  # 安装依赖（假设你有 requirements.txt 文件）
 
-    # 读取 GitHub Secrets 中的 STREAK_HISTORY 并设置为环境变量
+    # 读取 GitHub Secrets 中的 STREAK_HISTORY 并设置为环境变量，如果为空则初始化
     - name: Load streak history from secrets
-      run: echo "STREAK_HISTORY=${{ secrets.STREAK_HISTORY }}" >> $GITHUB_ENV
+      run: |
+        if [ -z "${{ secrets.STREAK_HISTORY }}" ]; then
+          echo "STREAK_HISTORY=2023-09-11,1" >> $GITHUB_ENV  # 初始化签到历史
+        else
+          echo "STREAK_HISTORY=${{ secrets.STREAK_HISTORY }}" >> $GITHUB_ENV
+        fi
+
+    # 输出STREAK_HISTORY调试信息
+    - name: Debug STREAK_HISTORY
+      run: echo "STREAK_HISTORY is $STREAK_HISTORY"
 
     - name: Run the weibo sign script
-      run: |
-        python weibo_sign_chaohua.py  # 运行签到脚本
+      run: python weibo_sign_chaohua.py  # 运行签到脚本
 
     # 更新签到后的 streak 历史到 GitHub Secrets
     - name: Save streak history to secrets
