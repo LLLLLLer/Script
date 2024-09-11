@@ -1,9 +1,9 @@
 name: Weibo Sign Chaohua
 
-# 在每天的UTC时间2:45，即北京时间10:45触发
+# 在每天的UTC时间22:30，即北京时间6:30触发
 on:
   schedule:
-    - cron: '45 2 * * *'  # UTC时间 2:45, 北京时间 10:45
+    - cron: '30 22 * * *'  # UTC时间 22:30, 北京时间 6:30
 
 jobs:
   sign:
